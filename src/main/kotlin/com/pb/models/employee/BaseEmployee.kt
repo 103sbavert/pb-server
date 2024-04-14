@@ -1,5 +1,6 @@
 package com.pb.models.employee
 
+import com.pb.enums.EmployeeRole
 import kotlinx.serialization.Serializable
 
 @Serializable

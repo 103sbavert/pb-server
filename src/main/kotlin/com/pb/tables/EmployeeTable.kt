@@ -1,6 +1,6 @@
 package com.pb.tables
 
-import com.pb.models.employee.EmployeeRole
+import com.pb.enums.EmployeeRole
 import org.jetbrains.exposed.sql.Table
 
 sealed class EmployeeTable(name: String) : Table(name) {

@@ -22,7 +22,7 @@ sealed class InquiryStatus {
 
     @Serializable
     data class CoordinatorRequested(
-        override val inquiryId: Int, val requestedCoordinator: String, val countDownMillis: Long, override val label: String = COORDINATOR_REQUESTED
+        override val inquiryId: Int, val requestedCoordinator: String, val assignedTime: Long, val countDownMillis: Long, override val label: String = COORDINATOR_REQUESTED
 
     ) : InquiryStatus()
 
@@ -38,6 +38,7 @@ sealed class InquiryStatus {
         val freelancerFirst: String?,
         val freelancerSecond: String?,
         val freelancerThird: String?,
+        val assignedTime: Long,
         val firstCountDownMillis: Long?,
         val secondCountDownMillis: Long?,
         val thirdCountDownMillis: Long?,
@@ -50,7 +51,6 @@ sealed class InquiryStatus {
     @Serializable
     data class FreelancerAssigned(
         override val inquiryId: Int, val coordinator: String, val freelancer: String, override val label: String = FREELANCER_ASSIGNED
-
     ) : InquiryStatus()
 
     @Serializable

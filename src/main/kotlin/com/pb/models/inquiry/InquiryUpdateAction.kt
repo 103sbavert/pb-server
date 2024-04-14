@@ -1,12 +1,12 @@
 package com.pb.models.inquiry
 
-import com.pb.Constants.NegativeInquiryActionLabels.DELETE_INQUIRY_AS_ADMIN
-import com.pb.Constants.NegativeInquiryActionLabels.REJECT_INQUIRY_AS_COORDINATOR
-import com.pb.Constants.NegativeInquiryActionLabels.REJECT_INQUIRY_AS_FREELANCER
 import com.pb.Constants.PositiveInquiryUpdateActionLabels.ACCEPT_INQUIRY_AS_FREELANCER
 import com.pb.Constants.PositiveInquiryUpdateActionLabels.ASSIGN_FREELANCER_AS_COORDINATOR
 import com.pb.Constants.PositiveInquiryUpdateActionLabels.CREATE_INQUIRY_AS_ADMIN
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.DELETE_INQUIRY_AS_ADMIN
 import com.pb.Constants.PositiveInquiryUpdateActionLabels.MARK_RESOLVED_AS_ADMIN
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.REJECT_INQUIRY_AS_COORDINATOR
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.REJECT_INQUIRY_AS_FREELANCER
 import com.pb.Constants.PositiveInquiryUpdateActionLabels.REQUEST_COORDINATOR_AS_ADMIN
 import com.pb.Constants.PositiveInquiryUpdateActionLabels.REQUEST_FREELANCER_AS_COORDINATOR
 import com.pb.serializer.InquiryUpdateActionSerializer
@@ -26,13 +26,13 @@ abstract class InquiryUpdateAction() {
     }
 
     @Serializable
-    data class RequestCoordinatorAsAdmin(val requestingAdminId: String, val requestedCoordinatorId: String, override val inquiryId: Int, val countDownMillis: Long) :
+    data class RequestCoordinatorAsAdmin(val requestingAdminId: String, val requestedCoordinatorId: String, override val inquiryId: Int, val assignedTime: Long, val countDownMillis: Long) :
         InquiryUpdateAction() {
         override val label = REQUEST_COORDINATOR_AS_ADMIN
     }
 
     @Serializable
-    data class RequestFreelancerAsCoordinator(val requestingCoordinatorId: String, val requestedFreelancerId: String, override val inquiryId: Int, val countDownMillis: Long) :
+    data class RequestFreelancerAsCoordinator(val requestingCoordinatorId: String, val requestedFreelancerId: String, override val inquiryId: Int, val assignedTime: Long, val countDownMillis: Long) :
         InquiryUpdateAction() {
         override val label = REQUEST_FREELANCER_AS_COORDINATOR
     }
@@ -40,8 +40,6 @@ abstract class InquiryUpdateAction() {
     @Serializable
     data class AcceptInquiryAsFreelancer(val acceptorFreelancerId: String, override val inquiryId: Int) : InquiryUpdateAction() {
         override val label: String = ACCEPT_INQUIRY_AS_FREELANCER
-
-
     }
 
     @Serializable
@@ -50,7 +48,7 @@ abstract class InquiryUpdateAction() {
     }
 
     @Serializable
-    data class MarkResolvedAsAdmin(val markingAdminId: String, override val inquiryId: Int) : InquiryUpdateAction() {
+    data class MarkResolvedAsAdmin(val markingAdminId: String, override val inquiryId: Int, val tags: String) : InquiryUpdateAction() {
         override val label: String = MARK_RESOLVED_AS_ADMIN
     }
 

@@ -7,7 +7,7 @@ data class SavedInquiry(
     val id: Int,
     override val name: String,
     override val description: String,
-    override val assigningMillis: Long,
+    override val creationTime: Long,
     override val deadlineMillis: Long,
     override val service: String,
     override val contactNumber: String,

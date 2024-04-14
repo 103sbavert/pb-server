@@ -17,9 +17,6 @@ object Constants {
         const val ACCEPT_INQUIRY_AS_FREELANCER = "AcceptInquiryAsFreelancer"
         const val ASSIGN_FREELANCER_AS_COORDINATOR = "AssignFreelancerAsCoordinator"
         const val MARK_RESOLVED_AS_ADMIN = "MarkResolvedAsAdmin" //
-    }
-
-    object NegativeInquiryActionLabels {
         const val DELETE_INQUIRY_AS_ADMIN = "DeleteInquiryAsAdmin" // must be done by an admin
         const val REJECT_INQUIRY_AS_COORDINATOR = "RejectInquiryAsCoordinator"  // must be done by a coordinator
         const val REJECT_INQUIRY_AS_FREELANCER = "RejectInquiryAsFreelancer" // must be done by a freelancer

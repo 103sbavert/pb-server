@@ -1,7 +1,8 @@
-package com.pb.models.employee
+package com.pb.enums
 
 import com.pb.tables.*
 import kotlinx.serialization.Serializable
+import java.util.IllegalFormatCodePointException
 
 @Serializable
 enum class EmployeeRole() {
@@ -27,6 +28,17 @@ enum class EmployeeRole() {
                     FREELANCER -> FreelancerTable
                 }
             }
+
+        fun String.fromString(): EmployeeRole {
+            return when (this.lowercase()) {
+                "admin" -> ADMIN
+                "coordinator" -> COORDINATOR
+                "freelancer" -> FREELANCER
+                else -> {
+                    throw IllegalArgumentException("No such role")
+                }
+            }
+        }
 
         fun String.parseEmployeeId(): EmployeeRole {
             return if (this.startsWith("PB-AM")) {

@@ -1,52 +1,59 @@
 package com.pb.serializer
 
-import com.pb.Constants
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.ACCEPT_INQUIRY_AS_FREELANCER
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.ASSIGN_FREELANCER_AS_COORDINATOR
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.CREATE_INQUIRY_AS_ADMIN
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.DELETE_INQUIRY_AS_ADMIN
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.MARK_RESOLVED_AS_ADMIN
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.REJECT_INQUIRY_AS_COORDINATOR
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.REJECT_INQUIRY_AS_FREELANCER
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.REQUEST_COORDINATOR_AS_ADMIN
+import com.pb.Constants.PositiveInquiryUpdateActionLabels.REQUEST_FREELANCER_AS_COORDINATOR
 import com.pb.models.inquiry.InquiryUpdateAction
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import java.lang.IllegalArgumentException
 
 
 object InquiryUpdateActionSerializer : JsonContentPolymorphicSerializer<InquiryUpdateAction>(InquiryUpdateAction::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<InquiryUpdateAction> {
         println("printed stuff: $element")
-        return when (val label = (element as JsonObject)["label"]?.jsonPrimitive?.content) {
-            Constants.PositiveInquiryUpdateActionLabels.CREATE_INQUIRY_AS_ADMIN -> {
+        return when ((element as JsonObject)["label"]?.jsonPrimitive?.content) {
+            CREATE_INQUIRY_AS_ADMIN -> {
                 InquiryUpdateAction.CreateInquiryAsAdmin.serializer()
             }
 
-            Constants.PositiveInquiryUpdateActionLabels.REQUEST_COORDINATOR_AS_ADMIN -> {
+            REQUEST_COORDINATOR_AS_ADMIN -> {
                 InquiryUpdateAction.RequestCoordinatorAsAdmin.serializer()
             }
 
-            Constants.PositiveInquiryUpdateActionLabels.REQUEST_FREELANCER_AS_COORDINATOR -> {
+            REQUEST_FREELANCER_AS_COORDINATOR -> {
                 InquiryUpdateAction.RequestFreelancerAsCoordinator.serializer()
             }
 
-            Constants.PositiveInquiryUpdateActionLabels.ACCEPT_INQUIRY_AS_FREELANCER -> {
+            ACCEPT_INQUIRY_AS_FREELANCER -> {
                 InquiryUpdateAction.AcceptInquiryAsFreelancer.serializer()
             }
 
-            Constants.PositiveInquiryUpdateActionLabels.ASSIGN_FREELANCER_AS_COORDINATOR -> {
+            ASSIGN_FREELANCER_AS_COORDINATOR -> {
                 InquiryUpdateAction.AssignFreelancerAsCoordinator.serializer()
             }
 
-            Constants.PositiveInquiryUpdateActionLabels.MARK_RESOLVED_AS_ADMIN -> {
+            MARK_RESOLVED_AS_ADMIN -> {
                 InquiryUpdateAction.MarkResolvedAsAdmin.serializer()
             }
 
-            Constants.NegativeInquiryActionLabels.DELETE_INQUIRY_AS_ADMIN -> {
+            DELETE_INQUIRY_AS_ADMIN -> {
                 InquiryUpdateAction.DeleteInquiryAsAdmin.serializer()
             }
 
-            Constants.NegativeInquiryActionLabels.REJECT_INQUIRY_AS_COORDINATOR -> {
+            REJECT_INQUIRY_AS_COORDINATOR -> {
                 InquiryUpdateAction.RejectInquiryAsCoordinator.serializer()
             }
 
-            Constants.NegativeInquiryActionLabels.REJECT_INQUIRY_AS_FREELANCER -> {
+            REJECT_INQUIRY_AS_FREELANCER -> {
                 InquiryUpdateAction.RejectInquiryAsFreelancer.serializer()
             }
 
