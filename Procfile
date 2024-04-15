@@ -1,0 +1,1 @@
+web: ./build/install/pb-server/bin/pb-server

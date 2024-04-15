@@ -4,6 +4,7 @@ val logback_version: String by project
 val ktorm_version = "3.6.0"
 
 plugins {
+    application
     kotlin("jvm") version "1.9.23"
     id("io.ktor.plugin") version "2.3.9"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.23"
@@ -38,5 +39,7 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("org.mariadb.jdbc:mariadb-java-client:3.1.3")
-    //implementation("org.ktorm:ktorm-core:$ktorm_version")
+}
+tasks {
+    create("stage").dependsOn("installDist")
 }

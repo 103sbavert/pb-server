@@ -10,7 +10,7 @@ object Constants {
         const val INQUIRY_RESOLVED = "InquiryResolved"
     }
 
-    object PositiveInquiryUpdateActionLabels {
+    object InquiryUpdateActionLabels {
         const val CREATE_INQUIRY_AS_ADMIN = "CreateInquiryAsAdmin"
         const val REQUEST_COORDINATOR_AS_ADMIN = "RequestCoordinatorAsAdmin"
         const val REQUEST_FREELANCER_AS_COORDINATOR = "RequestFreelancerAsCoordinator"
