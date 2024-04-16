@@ -39,6 +39,7 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("org.mariadb.jdbc:mariadb-java-client:3.1.3")
+    implementation("com.mysql:mysql-connector-j:8.3.0")
 }
 tasks {
     create("stage").dependsOn("installDist")
