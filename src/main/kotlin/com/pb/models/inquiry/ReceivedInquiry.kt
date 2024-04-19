@@ -7,9 +7,9 @@ class ReceivedInquiry(
     override val name: String,
     override val description: String,
     override val creationTime: Long,
-    override val deadlineMillis: Long,
+    override val deadline: Long,
     override val service: String,
     override val contactNumber: String,
     override val deliveryArea: String,
     override val reference: Boolean,
-): BaseInquiry()
+) : BaseInquiry()

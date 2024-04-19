@@ -9,6 +9,7 @@ import com.pb.Constants.InquiryUpdateActionLabels.REJECT_INQUIRY_AS_COORDINATOR
 import com.pb.Constants.InquiryUpdateActionLabels.REJECT_INQUIRY_AS_FREELANCER
 import com.pb.Constants.InquiryUpdateActionLabels.REQUEST_COORDINATOR_AS_ADMIN
 import com.pb.Constants.InquiryUpdateActionLabels.REQUEST_FREELANCER_AS_COORDINATOR
+import com.pb.Constants.InquiryUpdateActionLabels.UPDATE_TAGS_AS_ADMIN
 import com.pb.models.inquiry.InquiryUpdateAction
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
@@ -20,7 +21,11 @@ import kotlinx.serialization.json.jsonPrimitive
 object InquiryUpdateActionSerializer : JsonContentPolymorphicSerializer<InquiryUpdateAction>(InquiryUpdateAction::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<InquiryUpdateAction> {
         println("printed stuff: $element")
-        return when ((element as JsonObject)["label"]?.jsonPrimitive?.content) {
+        return when (val label = (element as JsonObject)["label"]?.jsonPrimitive?.content) {
+            UPDATE_TAGS_AS_ADMIN -> {
+                InquiryUpdateAction.UpdateTagsAsAdmin.serializer()
+            }
+
             CREATE_INQUIRY_AS_ADMIN -> {
                 InquiryUpdateAction.CreateInquiryAsAdmin.serializer()
             }

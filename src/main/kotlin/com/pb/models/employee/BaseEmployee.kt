@@ -4,7 +4,7 @@ import com.pb.enums.EmployeeRole
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class BaseEmployee {
+abstract class BaseEmployee {
     abstract val employeeId: String
     abstract val name: String
     abstract val emailAddress: String

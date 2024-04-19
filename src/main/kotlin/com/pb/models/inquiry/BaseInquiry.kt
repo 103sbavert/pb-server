@@ -1,10 +1,13 @@
 package com.pb.models.inquiry
 
-sealed class BaseInquiry() {
+import kotlinx.serialization.Serializable
+
+@Serializable
+abstract class BaseInquiry {
     abstract val name: String
     abstract val description: String
-    abstract val creationTime   : Long
-    abstract val deadlineMillis: Long
+    abstract val creationTime: Long
+    abstract val deadline: Long
     abstract val service: String
     abstract val contactNumber: String
     abstract val deliveryArea: String

@@ -3,7 +3,7 @@ ktor:
     modules:
       - com.pb.ApplicationKt.module
   deployment:
-    port: $PORT
+    port: 5000
 jwt:
   issuer: "pb.com"
   realm: "pb-server"

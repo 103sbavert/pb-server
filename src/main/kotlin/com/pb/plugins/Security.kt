@@ -2,9 +2,9 @@ package com.pb.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.pb.dao.employees.AdminTableDao
-import com.pb.dao.employees.CoordinatorTableDao
-import com.pb.dao.employees.FreelancerTableDao
+import com.pb.dao.employees.AdminMDBDao
+import com.pb.dao.employees.CoordinatorMDBDao
+import com.pb.dao.employees.FreelancerMDBDao
 import com.pb.enums.EmployeeRole
 import com.pb.enums.EmployeeRole.Companion.fromString
 import com.pb.enums.EmployeeRole.Companion.parseEmployeeId
@@ -22,9 +22,7 @@ fun Application.configureSecurity() {
     val issuer = environment.config.property("jwt.issuer").getString()
     val realm = environment.config.property("jwt.realm").getString()
     val secret = environment.config.property("jwt.secret").getString()
-    val adminTableDao = AdminTableDao(database)
-    val coordinatorTableDao = CoordinatorTableDao(database)
-    val freelancerTableDao = FreelancerTableDao(database)
+
 
 
     routing {
@@ -34,11 +32,26 @@ fun Application.configureSecurity() {
                 return@post
             }
 
-            val isLegal = when (credentials.employeeId.parseEmployeeId()) {
-                EmployeeRole.ADMIN -> AdminTableDao(database).verifyCredentials(credentials)
-                EmployeeRole.COORDINATOR -> CoordinatorTableDao(database).verifyCredentials(credentials)
-                EmployeeRole.FREELANCER -> FreelancerTableDao(database).verifyCredentials(credentials)
+            val role = credentials.employeeId.parseEmployeeId()
+
+
+            val isLegal = when (role) {
+                EmployeeRole.ADMIN -> {
+                    val adminDb = AdminMDBDao(credentials.employeeId, MongoDb.mongoDb)
+                    adminDb.verifyCredentials(credentials)
+                }
+
+                EmployeeRole.COORDINATOR -> {
+                    val coordinatorDb = CoordinatorMDBDao(credentials.employeeId, MongoDb.mongoDb)
+                    coordinatorDb.verifyCredentials(credentials)
+                }
+
+                EmployeeRole.FREELANCER -> {
+                    val freelancerDb = FreelancerMDBDao(credentials.employeeId, MongoDb.mongoDb)
+                    freelancerDb.verifyCredentials(credentials)
+                }
             }
+                System.err.println(isLegal)
 
 
             if (isLegal) {
@@ -73,13 +86,10 @@ fun Application.configureSecurity() {
                 if (role == null) return@validate null
 
                 val isValid = when (role) {
-                    EmployeeRole.ADMIN -> adminTableDao.getSelf(employeeId) != null
-                    EmployeeRole.COORDINATOR -> coordinatorTableDao.getSelf(employeeId) != null
-                    EmployeeRole.FREELANCER -> freelancerTableDao.getSelf(employeeId) != null
+                    EmployeeRole.ADMIN -> AdminMDBDao(employeeId, MongoDb.mongoDb).getSelf() != null
+                    EmployeeRole.COORDINATOR -> CoordinatorMDBDao(employeeId, MongoDb.mongoDb).getSelf() != null
+                    EmployeeRole.FREELANCER -> FreelancerMDBDao(employeeId, MongoDb.mongoDb).getSelf() != null
                 }
-
-                System.err.println("conf security" + credential)
-                System.err.println("conf security" + isValid)
 
                 if (isValid) {
                     JWTPrincipal(credential.payload)

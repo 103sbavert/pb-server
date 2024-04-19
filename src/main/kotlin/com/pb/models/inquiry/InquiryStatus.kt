@@ -6,55 +6,50 @@ import com.pb.Constants.InquiryStatusLabels.FREELANCER_ASSIGNED
 import com.pb.Constants.InquiryStatusLabels.FREELANCER_REQUESTED
 import com.pb.Constants.InquiryStatusLabels.INQUIRY_RESOLVED
 import com.pb.Constants.InquiryStatusLabels.UNASSIGNED
-import com.pb.serializer.InquiryStatusSerializer
+import com.pb.serializer.InquiryStatusBsonSerializer
 import kotlinx.serialization.Serializable
 
-
-@Serializable(InquiryStatusSerializer::class)
+@Serializable(InquiryStatusBsonSerializer::class)
 sealed class InquiryStatus {
-    abstract val inquiryId: Int
     abstract val label: String
 
     @Serializable
-    data class Unassigned(
-        override val inquiryId: Int, override val label: String = UNASSIGNED
-    ) : InquiryStatus()
+    class Unassigned() : InquiryStatus() {
+        override val label: String = UNASSIGNED
+    }
 
     @Serializable
-    data class CoordinatorRequested(
-        override val inquiryId: Int, val requestedCoordinator: String, val assignedTime: Long, val countDownMillis: Long, override val label: String = COORDINATOR_REQUESTED
-
-    ) : InquiryStatus()
-
-    @Serializable
-    data class CoordinatorAccepted(
-        override val inquiryId: Int, val coordinator: String, override val label: String = COORDINATOR_ACCEPTED
-    ) : InquiryStatus()
+    class CoordinatorRequested(
+        val coordinatorRequest: EmployeeRequest.CoordinatorRequest
+    ) : InquiryStatus() {
+        override val label: String = COORDINATOR_REQUESTED
+    }
 
     @Serializable
-    data class FreelancerRequested(
-        override val inquiryId: Int,
-        val coordinator: String,
-        val freelancerFirst: String?,
-        val freelancerSecond: String?,
-        val freelancerThird: String?,
-        val assignedTime: Long,
-        val firstCountDownMillis: Long?,
-        val secondCountDownMillis: Long?,
-        val thirdCountDownMillis: Long?,
-        val firstResponse: Boolean?,
-        val secondResponse: Boolean?,
-        val thirdResponse: Boolean?,
+    class CoordinatorAccepted(
+        val coordinatorId: String
+    ): InquiryStatus() {
+        override val label: String = COORDINATOR_ACCEPTED
+    }
+
+    @Serializable
+    class FreelancerRequested(
+        val coordinatorId: String, val freelancerRequests: List<EmployeeRequest.FreelancerRequest>
+    ) : InquiryStatus() {
         override val label: String = FREELANCER_REQUESTED
-    ) : InquiryStatus()
+    }
 
     @Serializable
-    data class FreelancerAssigned(
-        override val inquiryId: Int, val coordinator: String, val freelancer: String, override val label: String = FREELANCER_ASSIGNED
-    ) : InquiryStatus()
+    class FreelancerAssigned(
+        val coordinatorId: String, val freelancerId: String, val tags: Set<String>
+    ) : InquiryStatus() {
+        override val label: String = FREELANCER_ASSIGNED
+    }
 
     @Serializable
-    data class InquiryResolved(
-        override val inquiryId: Int, override val label: String = INQUIRY_RESOLVED, val tags: String = ""
-    ) : InquiryStatus()
+    class InquiryResolved(
+        val coordinatorId: String, val freelancerId: String, val tags: Set<String>
+    ) : InquiryStatus() {
+        override val label: String = INQUIRY_RESOLVED
+    }
 }
